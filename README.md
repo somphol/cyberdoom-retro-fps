@@ -226,6 +226,28 @@ Latest Chrome, Edge, Firefox and Safari with WebGL and Pointer Lock. Touch contr
 
 No third-party images, textures, audio files or 3D models are included. Every visual and sound is generated procedurally at runtime. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
+## Contributing
+
+Contributions are welcome — bug reports, feature ideas, accessibility improvements, and
+documentation fixes alike. Please read [CONTRIBUTING.md](CONTRIBUTING.md) and the
+[Code of Conduct](CODE_OF_CONDUCT.md) before opening a pull request.
+
+- **Found a bug?** [Open a bug report](https://github.com/somphol/cyberdoom-retro-fps/issues/new?template=bug_report.yml)
+- **Have an idea?** [Request a feature](https://github.com/somphol/cyberdoom-retro-fps/issues/new?template=feature_request.yml)
+- **Found a vulnerability?** Please follow [SECURITY.md](SECURITY.md) and report it privately.
+
+## Documentation
+
+| Document | Purpose |
+| --- | --- |
+| [README.md](README.md) | Overview, setup, controls, and architecture |
+| [CHANGELOG.md](CHANGELOG.md) | Notable changes and release history |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Local workflow, constraints, and pull request checks |
+| [SECURITY.md](SECURITY.md) | Supported versions and private vulnerability reporting |
+| [STATE.md](STATE.md) | Build timing, verification record, and token usage |
+| [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) | Library, font, and asset attribution |
+| [LICENSE](LICENSE) | MIT licence |
+
 ## License
 
 MIT © 2026 Somphol Boonjing. See [LICENSE](LICENSE).

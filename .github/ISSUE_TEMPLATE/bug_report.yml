@@ -1,0 +1,90 @@
+name: Bug report
+description: Report a reproducible problem with CYBERDOOM.
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve CYBERDOOM. Please search existing issues first, and do
+        not report security vulnerabilities here — see
+        [SECURITY.md](https://github.com/somphol/cyberdoom-retro-fps/blob/main/SECURITY.md).
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear and concise description of the bug.
+      placeholder: The app...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: List the exact actions needed to trigger the problem.
+      placeholder: |
+        1. Open the live demo
+        2. Select ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      placeholder: I expected...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Include any error message or console output.
+      placeholder: Instead, the app...
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: "Safari 18 on macOS 15"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device and viewport
+      description: Desktop, tablet, or phone, plus the approximate width if relevant.
+      placeholder: "iPhone 15, 390 × 844"
+
+  - type: dropdown
+    id: source
+    attributes:
+      label: Where did you run it?
+      options:
+        - GitHub Pages demo
+        - Local server
+        - Opened directly from disk
+        - Fork or modified version
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, console errors, or anything else that helps.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: I can reproduce this on the latest `main` or the live demo.
+          required: true
