@@ -1,24 +1,27 @@
+<div align="center">
+
+<img src="docs/social-card.png" alt="CYBERDOOM — Retro 3D First-Person Shooter Studio" width="100%" />
+
 # CYBERDOOM
 
-**Retro 3D First-Person Shooter Studio** — a complete, production-ready, 100% client-side FPS built with vanilla HTML5, CSS3, ES6 and Three.js r128.
+**Retro 3D First-Person Shooter Studio**
 
-[![Live demo](https://img.shields.io/badge/LIVE_DEMO-somphol.github.io%2Fcyberdoom--retro--fps-8dff5a?style=for-the-badge&labelColor=050807)](https://somphol.github.io/cyberdoom-retro-fps/)
-[![No backend](https://img.shields.io/badge/BACKEND-none-4ff5df?style=for-the-badge&labelColor=050807)](#)
-[![Three.js](https://img.shields.io/badge/THREE.JS-r128-ff3b50?style=for-the-badge&labelColor=050807)](#)
+Three sectors. One exit. A complete, 100% client-side FPS with procedural art, synthesized audio, and portable saves.
 
-> The machine cult has seized Dock Seven. Three sectors. One exit. **Purge the core.**
+[![Live demo](https://img.shields.io/badge/live_demo-online-8dff5a?style=flat-square)](https://somphol.github.io/cyberdoom-retro-fps/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-8dff5a?style=flat-square)](LICENSE)
 
-![CYBERDOOM title screen](screenshot-start.png)
+**[Try it live →](https://somphol.github.io/cyberdoom-retro-fps/)**
+
+</div>
+
+---
 
 ## Overview
 
 CYBERDOOM is a self-contained love letter to 1990s ray-caster shooters, packaged as a modern static web application. It procedurally builds three cyber-industrial sectors, populates them with billboarded cyborg enemies and supply sprites, and drives a complete combat → clear → descend loop with a Doom-style status bar, synthesised audio and JSON save transfer.
 
 Everything runs in the browser. There is no server, no build step, no database, no API key and no image/audio asset pipeline. The wall, floor, ceiling, enemy, pickup, weapon, face and minimap art are generated at runtime with Canvas 2D. Sound effects are synthesised with the Web Audio API.
-
-## Live demo
-
-<https://somphol.github.io/cyberdoom-retro-fps/>
 
 ## Features
 
