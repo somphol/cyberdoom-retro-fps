@@ -1,0 +1,202 @@
+{
+  "project": "cyberdoom-retro-fps",
+  "title": "CYBERDOOM \u2014 Retro 3D First-Person Shooter Studio",
+  "description": "A complete, production-ready, 100% client-side retro 3D first-person shooter built with vanilla HTML5, CSS3, ES6 and Three.js r128. Three procedurally generated sectors, billboard enemies, hitscan weapons, Web Audio synthesis, Doom-style HUD, localStorage autosave and JSON save transfer.",
+  "build": {
+    "startedAt": "2026-11-01T04:42:50Z",
+    "completedAt": "2026-11-01T05:13:41Z",
+    "durationSeconds": 1851,
+    "durationHuman": "30m 51s",
+    "timezone": "UTC"
+  },
+  "tokens": {
+    "input": 487400,
+    "output": 127158,
+    "reasoning": 118967,
+    "cacheRead": 16392320,
+    "cacheWrite": 1169,
+    "total": 733525,
+    "totalWithCache": 17127014,
+    "note": "Snapshot from the OpenCode session record when the project was packaged. total = input + output + reasoning. Cache reads/writes are context-usage figures and are listed separately. The final state commit, GitHub push and Pages verification happen after this snapshot, so the live session totals are marginally higher."
+  },
+  "cost": {
+    "usd": 0.0,
+    "note": "As reported by the OpenCode session record."
+  },
+  "sessionId": "ses_e6a9523f4ffehQyAWD8OX7Xk0v",
+  "model": {
+    "name": "DeepSeek V4.1 Flash",
+    "providerID": "opencode-go",
+    "modelID": "deepseek-v4.1-flash"
+  },
+  "harness": {
+    "name": "OpenCode",
+    "version": "2.2.5"
+  },
+  "repository": "https://github.com/somphol/cyberdoom-retro-fps",
+  "pages": "https://somphol.github.io/cyberdoom-retro-fps/",
+  "game": {
+    "engine": "Three.js r128 + PointerLockControls",
+    "render": "low-resolution WebGL canvas scaled with image-rendering: pixelated + CRT/scanline overlays",
+    "sectors": 3,
+    "sectorNames": [
+      "Docking Bay Seven",
+      "Reactor Spine",
+      "The Cyber Core"
+    ],
+    "levelGeneration": "seeded recursive-backtracker maze, carved rooms, braided loops, BFS reachability, far-room exit placement, A* enemy navigation",
+    "enemies": 3,
+    "enemyTypes": [
+      "Cult Trooper",
+      "Cyber Hound",
+      "Siege Cyborg"
+    ],
+    "weapons": 2,
+    "weaponTypes": [
+      "Plasma Gun",
+      "Super Shotgun"
+    ],
+    "pickups": 4,
+    "pickupTypes": [
+      "Medkit",
+      "Armor Shard",
+      "Plasma Cells",
+      "Shotgun Shells"
+    ],
+    "features": [
+      "PointerLockControls FPS movement with sprint, jump and collision",
+      "procedural wall/floor/ceiling textures, props, signage and ceiling lights",
+      "billboard enemy and pickup sprites",
+      "enemy state machine with patrol, alert, chase and attack",
+      "A* pathfinding and line-of-sight checks",
+      "hitscan ray verification, headshots, spread, range falloff",
+      "particle hit sparks, tracers, muzzle-flash point light and screen shake",
+      "procedural plasma gun / super shotgun viewmodels with recoil and sway",
+      "Doom-style status bar and animated marine portrait",
+      "minimap, compass, objective tracker and message feed",
+      "procedural Web Audio SFX and ambient drone",
+      "localStorage autosave, JSON export/import, high-score archive",
+      "responsive desktop and touch layouts",
+      "17-check built-in self-test surface"
+    ],
+    "controls": [
+      "WASD / arrows move",
+      "mouse look",
+      "LMB fire",
+      "Space jump/interact",
+      "1/2/Q switch weapon",
+      "Shift sprint",
+      "F floodlight",
+      "M mute",
+      "Esc pause",
+      "touch stick + look pad + fire/jump/swap"
+    ]
+  },
+  "verification": {
+    "selfTest": "17/17",
+    "browser": "Headless Chrome 156 (WebGL via ANGLE/Metal) and SwiftShader fallback",
+    "checks": [
+      "dungeon connectivity, start/exit reachability and pathfinding",
+      "wall collision and collision-free spawn",
+      "plasma and shotgun hitscan damage and kill scoring",
+      "enemy AI aggro, chase and projectile damage",
+      "health, armour absorption and face-state changes",
+      "autosave -> title -> continue restoration",
+      "pause/resume, save download and real file-input import",
+      "exit unlock, Space interaction, three-sector progression and victory",
+      "high-score recording and persistence across reload",
+      "death -> game over -> sector retry",
+      "settings persistence and render-resolution changes",
+      "mobile 390x844 touch layout",
+      "zero uncaught exceptions and zero console errors"
+    ],
+    "performance": {
+      "viewport": "1600x1000",
+      "drawCalls": 194,
+      "triangles": 3684,
+      "fpsApprox": 57,
+      "note": "Observed in the headless Chrome test environment; the renderer caps internal resolution and can be tuned from the pause menu."
+    },
+    "screenshots": [
+      "screenshot.png",
+      "screenshot-start.png",
+      "screenshot-portal.png",
+      "screenshot-mobile.png",
+      "screenshot-victory.png"
+    ]
+  },
+  "files": {
+    "index.html": {
+      "bytes": 21221,
+      "lines": 360
+    },
+    "style.css": {
+      "bytes": 46879,
+      "lines": 1542
+    },
+    "script.js": {
+      "bytes": 206441,
+      "lines": 5576
+    },
+    "README.md": {
+      "bytes": 10546,
+      "lines": 222
+    },
+    "screenshot.png": {
+      "bytes": 1059814,
+      "lines": 0
+    },
+    "screenshot-start.png": {
+      "bytes": 564028,
+      "lines": 0
+    },
+    "screenshot-portal.png": {
+      "bytes": 1133594,
+      "lines": 0
+    },
+    "screenshot-mobile.png": {
+      "bytes": 881239,
+      "lines": 0
+    },
+    "screenshot-victory.png": {
+      "bytes": 372205,
+      "lines": 0
+    },
+    "favicon.svg": {
+      "bytes": 597,
+      "lines": 10
+    }
+  },
+  "credits": [
+    {
+      "role": "Built with",
+      "name": "OpenCode",
+      "version": "2.2.5",
+      "url": "https://opencode.ai"
+    },
+    {
+      "role": "Model",
+      "name": "DeepSeek V4.1 Flash",
+      "id": "opencode-go/deepseek-v4.1-flash"
+    },
+    {
+      "role": "3D engine",
+      "name": "Three.js",
+      "version": "r128",
+      "license": "MIT",
+      "url": "https://threejs.org/"
+    },
+    {
+      "role": "Pointer lock",
+      "name": "PointerLockControls",
+      "version": "Three.js r128 examples",
+      "license": "MIT"
+    },
+    {
+      "role": "Typography",
+      "name": "Press Start 2P / Rajdhani / Share Tech Mono",
+      "license": "SIL OFL 1.1",
+      "url": "https://fonts.google.com/"
+    }
+  ]
+}

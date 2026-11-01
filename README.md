@@ -201,6 +201,13 @@ End-to-end headless Chrome runs verified:
 
 Rendering statistics observed in Chrome at 1600×1000: ~194 draw calls, ~3,700 triangles, ~57 FPS in the test environment.
 
+## Build state
+
+The creation timing, token usage, harness/model credits and verification snapshot for this build are recorded in:
+
+- [`STATE.md`](STATE.md) — human-readable build report
+- [`state.json`](state.json) — machine-readable state file
+
 ## Browser support
 
 Latest Chrome, Edge, Firefox and Safari with WebGL and Pointer Lock. Touch controls are enabled on coarse-pointer devices. Audio starts after the first user gesture, as required by browser autoplay policies.
