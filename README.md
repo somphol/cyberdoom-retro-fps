@@ -238,6 +238,17 @@ documentation fixes alike. Please read [CONTRIBUTING.md](CONTRIBUTING.md) and th
 
 ## Documentation
 
+Project handoff and technical guides:
+
+- [AGENTS.md](AGENTS.md) — handoff for the next maintainer or AI agent
+- [docs/REPRODUCTION.md](docs/REPRODUCTION.md) — rebuild and verification book
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — module map and algorithms
+- [docs/TESTING.md](docs/TESTING.md) — verified matrix and gaps
+- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — Pages operations
+- [skills/cyberdoom-retro-fps/SKILL.md](skills/cyberdoom-retro-fps/SKILL.md) — reusable build skill
+
+Repository policies and records:
+
 | Document | Purpose |
 | --- | --- |
 | [README.md](README.md) | Overview, setup, controls, and architecture |

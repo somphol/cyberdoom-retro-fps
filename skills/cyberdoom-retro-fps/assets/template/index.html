@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#070b0a">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="CYBERDOOM — a retro 3D first-person shooter studio built with vanilla HTML, CSS, ES6 and Three.js. Fight through three cyber-industrial sectors, purge the machine cult and escape the core.">
+  <meta name="author" content="Somphol Boonjing">
+  <meta name="robots" content="index, follow">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>CYBERDOOM — Retro 3D First-Person Shooter Studio</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="canonical" href="https://somphol.github.io/cyberdoom-retro-fps/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="CYBERDOOM" />
+  <meta property="og:title" content="CYBERDOOM — Retro 3D First-Person Shooter Studio" />
+  <meta property="og:description" content="Three sectors. One exit. A complete, 100% client-side FPS with procedural art, synthesized audio, and portable saves." />
+  <meta property="og:url" content="https://somphol.github.io/cyberdoom-retro-fps/" />
+  <meta property="og:image" content="https://somphol.github.io/cyberdoom-retro-fps/docs/social-card.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="CYBERDOOM — Retro 3D First-Person Shooter Studio" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CYBERDOOM — Retro 3D First-Person Shooter Studio" />
+  <meta name="twitter:description" content="Three sectors. One exit. A complete, 100% client-side FPS with procedural art, synthesized audio, and portable saves." />
+  <meta name="twitter:image" content="https://somphol.github.io/cyberdoom-retro-fps/docs/social-card.png" />
+  <meta name="twitter:image:alt" content="CYBERDOOM — Retro 3D First-Person Shooter Studio" />
+
+</head>
+<body>
+  <div id="app" class="app">
+    <canvas id="game-canvas" class="game-canvas" aria-label="CyberDoom 3D game viewport"></canvas>
+    <div class="fx-scanlines" aria-hidden="true"></div>
+    <div class="fx-vignette" aria-hidden="true"></div>
+    <div class="fx-noise" aria-hidden="true"></div>
+    <div id="damage-vignette" class="fx-damage" aria-hidden="true"></div>
+    <div id="flash-overlay" class="fx-flash" aria-hidden="true"></div>
+
+    <!-- ==================== IN-GAME HUD ==================== -->
+    <div id="hud" class="hud is-hidden" aria-hidden="true">
+      <div class="hud-top">
+        <div class="sector-card">
+          <div class="sector-kicker">
+            <span class="signal-dot"></span>
+            <span>SECTOR <b id="hud-sector">01</b> // <span id="hud-threat">HOSTILE</span></span>
+          </div>
+          <h2 id="hud-sector-name">DOCKING BAY SEVEN</h2>
+          <div class="sector-objective" id="hud-objective">
+            <span class="objective-label">OBJECTIVE</span>
+            <span id="hud-objective-text">PURGE ALL HOSTILES</span>
+            <span class="objective-count" id="hud-hostiles">00</span>
+          </div>
+        </div>
+
+        <div class="compass" aria-hidden="true">
+          <div class="compass-ticks">
+            <span>W</span><span>NW</span><span>N</span><span>NE</span><span>E</span>
+          </div>
+          <div class="compass-value"><span id="compass-cardinal">N</span> <b id="compass-bearing">000</b>&deg;</div>
+        </div>
+
+        <div class="minimap-shell">
+          <div class="minimap-head">
+            <span>LOCAL SCAN</span><span class="blink">LIVE</span>
+          </div>
+          <canvas id="minimap" width="180" height="180" aria-label="Sector minimap"></canvas>
+          <div class="minimap-foot"><span class="dot dot-player"></span>YOU <span class="dot dot-enemy"></span>HOSTILE <span class="dot dot-exit"></span>EXIT</div>
+        </div>
+      </div>
+
+      <div id="crosshair" class="crosshair" aria-hidden="true">
+        <span class="ch ch-top"></span>
+        <span class="ch ch-right"></span>
+        <span class="ch ch-bottom"></span>
+        <span class="ch ch-left"></span>
+        <span class="ch-dot"></span>
+        <span id="hitmarker" class="hitmarker"></span>
+      </div>
+
+      <div id="interaction-prompt" class="interaction-prompt is-hidden">
+        <span class="prompt-key">[SPACE]</span>
+        <span id="interaction-text">EXIT SEALED</span>
+      </div>
+
+      <div id="message-feed" class="message-feed" aria-live="polite"></div>
+
+      <div class="weapon-stage" aria-hidden="true">
+        <canvas id="weapon-canvas" width="900" height="420"></canvas>
+      </div>
+
+      <div class="statusbar">
+        <section class="sb-panel sb-ammo" aria-label="Ammunition">
+          <div class="sb-label">AMMO</div>
+          <div class="sb-big" id="ammo-value">100</div>
+          <div class="sb-sub" id="ammo-type">PLASMA CELLS</div>
+          <div class="weapon-dock">
+            <span id="weapon-plasma" class="weapon-chip is-active"><b>1</b> PLASMA</span>
+            <span id="weapon-shotgun" class="weapon-chip"><b>2</b> SHOTGUN</span>
+          </div>
+        </section>
+
+        <section class="sb-panel sb-vitals" aria-label="Health">
+          <div class="sb-label">VITALS</div>
+          <div class="sb-big" id="health-value">100<span>%</span></div>
+          <div class="bar"><i id="health-bar"></i></div>
+          <div class="sb-sub">SUIT INTEGRITY</div>
+        </section>
+
+        <section class="sb-face" aria-label="Marine status">
+          <div class="face-frame">
+            <canvas id="face-canvas" width="96" height="96"></canvas>
+            <span class="face-scan" aria-hidden="true"></span>
+          </div>
+          <div class="face-status" id="face-status">STEADY</div>
+        </section>
+
+        <section class="sb-panel sb-armor" aria-label="Armor">
+          <div class="sb-label">ARMOR</div>
+          <div class="sb-big" id="armor-value">0<span>%</span></div>
+          <div class="bar bar-armor"><i id="armor-bar"></i></div>
+          <div class="sb-sub">ALLOY PLATING</div>
+        </section>
+
+        <section class="sb-panel sb-score" aria-label="Score">
+          <div class="sb-label">SCORE</div>
+          <div class="sb-big sb-score-value" id="score-value">000000</div>
+          <div class="score-grid">
+            <span>KILLS <b id="kills-value">0</b></span>
+            <span>ACC <b id="accuracy-value">0%</b></span>
+          </div>
+        </section>
+      </div>
+
+      <div class="hud-hints" aria-hidden="true">
+        <span><b>WASD</b> MOVE</span>
+        <span><b>MOUSE</b> AIM</span>
+        <span><b>LMB</b> FIRE</span>
+        <span><b>SPACE</b> JUMP</span>
+        <span><b>1/2</b> WEAPON</span>
+        <span><b>F</b> LIGHT</span>
+        <span><b>ESC</b> PAUSE</span>
+      </div>
+    </div>
+
+    <!-- ==================== START / TITLE ==================== -->
+    <section id="screen-start" class="screen screen-start is-active" aria-labelledby="game-title">
+      <div class="title-grid" aria-hidden="true"></div>
+      <div class="title-glow" aria-hidden="true"></div>
+      <div class="start-wrap">
+        <header class="title-lockup">
+          <div class="build-tag"><span class="signal-dot"></span> OPENCODE ARCADE DIVISION // BUILD 2026.10.31</div>
+          <h1 id="game-title" class="game-title"><span>CYBER</span><em>DOOM</em></h1>
+          <div class="title-rule"><i></i><b>RETRO 3D FIRST-PERSON SHOOTER STUDIO</b><i></i></div>
+          <p class="title-blurb">The machine cult has seized Dock Seven. Three sectors. One exit. <strong>Purge the core.</strong></p>
+        </header>
+
+        <div class="start-layout">
+          <div class="menu-panel panel">
+            <div class="panel-head"><span>COMMAND CONSOLE</span><span class="panel-code">CD-1993</span></div>
+            <div class="menu-actions">
+              <button id="btn-new" class="btn btn-primary btn-large" type="button">
+                <span class="btn-index">01</span>
+                <span class="btn-copy"><b>NEW CAMPAIGN</b><small>Insert boot cartridge</small></span>
+                <span class="btn-arrow">&gt;&gt;</span>
+              </button>
+              <button id="btn-continue" class="btn" type="button" disabled>
+                <span class="btn-index">02</span>
+                <span class="btn-copy"><b>CONTINUE RUN</b><small id="continue-detail">No autosave detected</small></span>
+                <span class="btn-arrow">&gt;&gt;</span>
+              </button>
+              <button id="btn-load-file" class="btn" type="button">
+                <span class="btn-index">03</span>
+                <span class="btn-copy"><b>LOAD GAME STATE</b><small>Import cyberdoom_save.json</small></span>
+                <span class="btn-arrow">&gt;&gt;</span>
+              </button>
+            </div>
+            <div class="menu-note">
+              <span class="note-key">CLICK</span> to capture mouse &middot; <span class="note-key">ESC</span> to release
+            </div>
+          </div>
+
+          <aside class="briefing-panel panel">
+            <div class="panel-head"><span>FIELD MANUAL</span><span class="panel-code">REV.3</span></div>
+            <div class="control-grid">
+              <div><kbd>W A S D</kbd><span>Move / strafe</span></div>
+              <div><kbd>MOUSE</kbd><span>Look &amp; aim</span></div>
+              <div><kbd>LMB</kbd><span>Primary fire</span></div>
+              <div><kbd>SPACE</kbd><span>Jump / interact</span></div>
+              <div><kbd>1 / 2 / Q</kbd><span>Switch weapon</span></div>
+              <div><kbd>SHIFT</kbd><span>Sprint</span></div>
+              <div><kbd>F</kbd><span>Suit floodlight</span></div>
+              <div><kbd>M</kbd><span>Mute synth</span></div>
+            </div>
+            <div class="briefing-rule"></div>
+            <ul class="brief-list">
+              <li><b>01</b> Clear every hostile in the sector to unseal the exit portal.</li>
+              <li><b>02</b> Health, armor and ammo are cached in supply sprites. Walk over them.</li>
+              <li><b>03</b> The run autosaves every few seconds. Export a save file from the pause menu.</li>
+            </ul>
+          </aside>
+        </div>
+
+        <div class="mobile-credit">BUILT WITH OPENCODE 2.2.5 &middot; DEEPSEEK V4.1 FLASH &middot; THREE.JS r128</div>
+
+        <footer class="start-footer">
+          <div class="records-panel">
+            <div class="records-title"><span>HALL OF CARNAGE</span><span>TOP RUNS</span></div>
+            <table class="records-table">
+              <thead><tr><th>#</th><th>SCORE</th><th>KILLS</th><th>SECTOR</th><th>DATE</th></tr></thead>
+              <tbody id="title-records">
+                <tr class="empty-row"><td colspan="5">NO COMBAT RECORDS // BE THE FIRST</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="credit-block">
+            <div class="credit-line">DESIGNED &amp; BUILT BY <b>OPENCODE</b></div>
+            <div class="credit-line">REASONING CORE <b>DEEPSEEK V4.1 FLASH</b></div>
+            <div class="credit-line muted">THREE.JS r128 &middot; WEB AUDIO SYNTHESIS &middot; ZERO BACKEND</div>
+            <div class="system-readout"><span class="signal-dot"></span> <span id="system-status">SYSTEM NOMINAL</span> <b id="system-clock">--:--:--</b></div>
+          </div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ==================== PAUSE ==================== -->
+    <section id="screen-pause" class="screen screen-modal" aria-labelledby="pause-title">
+      <div class="modal-card panel">
+        <div class="panel-head"><span>SIMULATION PAUSED</span><span class="panel-code">TACTICAL HOLD</span></div>
+        <h2 id="pause-title" class="modal-title">HOLD POSITION</h2>
+        <p class="modal-sub">Mouse released. The sector is frozen until you re-engage.</p>
+        <div class="pause-stats">
+          <div><span>SECTOR</span><b id="pause-level">01</b></div>
+          <div><span>SCORE</span><b id="pause-score">000000</b></div>
+          <div><span>KILLS</span><b id="pause-kills">0</b></div>
+          <div><span>RUN TIME</span><b id="pause-time">00:00</b></div>
+        </div>
+        <div class="menu-actions">
+          <button id="btn-resume" class="btn btn-primary" type="button"><span class="btn-index">01</span><span class="btn-copy"><b>RESUME COMBAT</b><small>Re-capture mouse</small></span><span class="btn-arrow">&gt;&gt;</span></button>
+          <button id="btn-pause-save" class="btn" type="button"><span class="btn-index">02</span><span class="btn-copy"><b>SAVE GAME STATE</b><small>Download cyberdoom_save.json</small></span><span class="btn-arrow">&darr;</span></button>
+          <button id="btn-pause-load" class="btn" type="button"><span class="btn-index">03</span><span class="btn-copy"><b>LOAD GAME STATE</b><small>Import a save file</small></span><span class="btn-arrow">&uarr;</span></button>
+          <button id="btn-pause-quit" class="btn btn-ghost" type="button"><span class="btn-index">04</span><span class="btn-copy"><b>SAVE &amp; QUIT</b><small>Return to title</small></span><span class="btn-arrow">X</span></button>
+        </div>
+        <div class="settings-block">
+          <div class="settings-head">CALIBRATION</div>
+          <label class="setting-row"><span>Mouse sensitivity</span><input id="setting-sensitivity" type="range" min="0.3" max="2" step="0.05" value="1"><b id="setting-sensitivity-value">1.00</b></label>
+          <label class="setting-row"><span>Synth volume</span><input id="setting-volume" type="range" min="0" max="100" step="1" value="55"><b id="setting-volume-value">55</b></label>
+          <label class="setting-row"><span>Render resolution</span><input id="setting-pixel" type="range" min="50" max="100" step="5" value="75"><b id="setting-pixel-value">75%</b></label>
+          <label class="setting-row setting-check"><span>Screen shake &amp; CRT flicker</span><input id="setting-shake" type="checkbox" checked><b id="setting-shake-value">ON</b></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== LEVEL CLEAR ==================== -->
+    <section id="screen-levelclear" class="screen screen-modal" aria-labelledby="clear-title">
+      <div class="modal-card panel clear-card">
+        <div class="panel-head"><span>SECTOR PURGED</span><span class="panel-code">ACCESS GRANTED</span></div>
+        <div class="clear-stamp">CLEARED</div>
+        <h2 id="clear-title" class="modal-title">SECTOR 01 SECURED</h2>
+        <p class="modal-sub" id="clear-sector-name">DOCKING BAY SEVEN</p>
+        <div class="result-grid">
+          <div><span>HOSTILES DOWN</span><b id="clear-kills">0</b></div>
+          <div><span>RUN TIME</span><b id="clear-time">00:00</b></div>
+          <div><span>CLEAR BONUS</span><b id="clear-bonus">+0</b></div>
+          <div><span>TOTAL SCORE</span><b id="clear-score">000000</b></div>
+        </div>
+        <button id="btn-level-next" class="btn btn-primary btn-large" type="button"><span class="btn-index">&gt;</span><span class="btn-copy"><b>DESCEND TO NEXT SECTOR</b><small id="next-sector-detail">SECTOR 02 // REACTOR SPINE</small></span><span class="btn-arrow">&gt;&gt;</span></button>
+      </div>
+    </section>
+
+    <!-- ==================== VICTORY ==================== -->
+    <section id="screen-victory" class="screen screen-modal" aria-labelledby="victory-title">
+      <div class="modal-card panel victory-card">
+        <div class="panel-head"><span>CORE BREACH COMPLETE</span><span class="panel-code">MISSION END</span></div>
+        <div class="victory-mark" aria-hidden="true">&#10022;</div>
+        <h2 id="victory-title" class="modal-title">THE CORE IS SILENT</h2>
+        <p class="modal-sub">Dock Seven is yours. The machine cult has been purged from all three sectors.</p>
+        <div class="result-grid result-grid-wide">
+          <div><span>FINAL SCORE</span><b id="victory-score">000000</b></div>
+          <div><span>TOTAL KILLS</span><b id="victory-kills">0</b></div>
+          <div><span>ACCURACY</span><b id="victory-accuracy">0%</b></div>
+          <div><span>RUN TIME</span><b id="victory-time">00:00</b></div>
+        </div>
+        <div class="rank-line">COMBAT RATING <b id="victory-rank">S</b> <span id="victory-record-note">NEW RECORD</span></div>
+        <div class="victory-actions">
+          <button id="btn-victory-new" class="btn btn-primary" type="button"><span class="btn-copy"><b>NEW CAMPAIGN</b><small>Purge it again</small></span><span class="btn-arrow">&gt;&gt;</span></button>
+          <button id="btn-victory-save" class="btn" type="button"><span class="btn-copy"><b>EXPORT SAVE STATE</b><small>Download final run</small></span><span class="btn-arrow">&darr;</span></button>
+          <button id="btn-victory-title" class="btn btn-ghost" type="button"><span class="btn-copy"><b>TITLE SCREEN</b><small>Hall of Carnage</small></span><span class="btn-arrow">X</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== GAME OVER ==================== -->
+    <section id="screen-gameover" class="screen screen-modal" aria-labelledby="gameover-title">
+      <div class="modal-card panel gameover-card">
+        <div class="panel-head"><span>SUIT FAILURE</span><span class="panel-code">SIGNAL LOST</span></div>
+        <div class="gameover-mark" aria-hidden="true">&#9760;</div>
+        <h2 id="gameover-title" class="modal-title">YOU ARE DEAD</h2>
+        <p class="modal-sub">The machine cult logs another fallen marine. The core remains online.</p>
+        <div class="result-grid">
+          <div><span>FINAL SCORE</span><b id="gameover-score">000000</b></div>
+          <div><span>KILLS</span><b id="gameover-kills">0</b></div>
+          <div><span>SECTOR REACHED</span><b id="gameover-level">01</b></div>
+          <div><span>PERSONAL BEST</span><b id="gameover-best">000000</b></div>
+        </div>
+        <div class="gameover-actions">
+          <button id="btn-gameover-retry" class="btn btn-primary" type="button"><span class="btn-copy"><b>RETRY SECTOR</b><small>Respawn with field kit</small></span><span class="btn-arrow">&gt;&gt;</span></button>
+          <button id="btn-gameover-title" class="btn btn-ghost" type="button"><span class="btn-copy"><b>TITLE SCREEN</b><small>End transmission</small></span><span class="btn-arrow">X</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== LOADING ==================== -->
+    <section id="screen-loading" class="screen screen-loading is-active" aria-label="Loading">
+      <div class="boot-wrap">
+        <div class="boot-brand">CYBERDOOM<span>//</span>OS</div>
+        <div class="boot-log" id="boot-log">
+          <div>&gt; MOUNTING CARTRIDGE ............ OK</div>
+          <div>&gt; SPINNING UP RENDER CORE ........ OK</div>
+          <div>&gt; SYNTHESISING WEAPON AUDIO ..... OK</div>
+          <div>&gt; CALIBRATING RETINA TRACKER .... OK</div>
+        </div>
+        <div class="boot-progress"><i id="boot-bar"></i></div>
+        <div class="boot-status" id="boot-status">INITIALISING COMBAT SIMULATION</div>
+      </div>
+    </section>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <div id="fatal-error" class="fatal-error is-hidden">
+      <div class="fatal-card panel">
+        <div class="panel-head"><span>FATAL FAULT</span><span class="panel-code">WEBGL</span></div>
+        <h2>RENDER CORE OFFLINE</h2>
+        <p id="fatal-message">This browser could not initialise WebGL. Enable hardware acceleration or try a current version of Chrome, Edge, Firefox or Safari.</p>
+        <button class="btn btn-primary" type="button" onclick="location.reload()"><span class="btn-copy"><b>REBOOT SIMULATION</b><small>Reload the page</small></span></button>
+      </div>
+    </div>
+
+    <!-- ==================== TOUCH CONTROLS ==================== -->
+    <div id="touch-ui" class="touch-ui is-hidden" aria-hidden="true">
+      <div id="touch-move-zone" class="touch-zone touch-move-zone">
+        <div id="touch-stick" class="touch-stick"><i></i></div>
+        <span class="touch-label">MOVE</span>
+      </div>
+      <div id="touch-look-zone" class="touch-zone touch-look-zone"><span class="touch-label">LOOK</span></div>
+      <button id="touch-fire" class="touch-btn touch-fire" type="button"><span>FIRE</span></button>
+      <button id="touch-jump" class="touch-btn touch-jump" type="button"><span>JUMP</span></button>
+      <button id="touch-swap" class="touch-btn touch-swap" type="button"><span>SWAP</span></button>
+    </div>
+
+    <input id="import-file" type="file" accept=".json,application/json" hidden>
+    <noscript><div class="noscript">CYBERDOOM requires JavaScript and WebGL to run.</div></noscript>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
